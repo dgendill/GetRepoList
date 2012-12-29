@@ -6,11 +6,9 @@ Fetches all the repositories from a GitHub profile and puts them into a JSON fil
 Example
 =======
 
-`php GetRepoList.php --name="Dom" --url="http://github.com/dgendill"`
+    php GetRepoList.php --name="Dom" --url="http://github.com/dgendill"
 
 Creates two files in the directory.
 
-`
-Dom.html          // The HTML of the profile page  
-DomRepoList.json  // The JSON list of repos. "RepoName" => "RepoURL"
-`
+    Dom.html          // The HTML of the profile page
+    DomRepoList.json  // The JSON list of repos. "RepoName" => "RepoURL"
