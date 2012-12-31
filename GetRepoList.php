@@ -38,20 +38,22 @@ use DomUtil\WebUtil as WebUtil;
 // --------------------------------
 
     $profileName = $opts['profileName'];
+    $file = dirname(__FILE__) . "/" . $profileName . ".html";
+    $repoFile = dirname(__FILE__) . "/" . $opts['profileName'] . "RepoList.txt";
     $profileURL = $opts['profileURL'];
     $fetchUpdate = $opts['fetchUpdate'];
     $web = new WebUtil();
 
-    if (file_exists($profileName . ".html") && ($fetchUpdate === false)) {
+    if (file_exists($file) && ($fetchUpdate === false)) {
         print "Fetching repositories from cache...\n";
-        $html = file_get_contents($profileName . ".html");
+        $html = file_get_contents($file);
     } else {
         print "Fetching repositories from github...";
         $html = $web->getResource($profileURL);
 
         if ($html['content'] !== FALSE) {
-            print "Writing content to $profileName.html...\n";
-            file_put_contents($profileName . ".html", $html['content']);
+            print "Writing content to $file...\n";
+            file_put_contents($file, $html['content']);
         }
         $html = $html['content'];
     }
@@ -72,13 +74,13 @@ use DomUtil\WebUtil as WebUtil;
         $urlNode = $xpath->query('h3/a/@href', $context);
         
         $name = $nameNode->item(0)->nodeValue;
-        $url = "https://github.com/" . $urlNode->item(0)->nodeValue . ".git";
+        $url = "https://github.com" . $urlNode->item(0)->nodeValue . ".git";
 
-        $projects[$name] = $url;
+        array_push($projects, $name . "||||" . $url);
     }
 
-    file_put_contents($opts['profileName'] . "RepoList.json", json_encode($projects));
-    print "Done. " . dirname(__FILE__) . "/" . $opts['profileName'] . "RepoList.json has been written.\n"
+    file_put_contents($repoFile, implode($projects, "\n"));
+    print "Done. $repoFile has been written.\n"
 
 
 
